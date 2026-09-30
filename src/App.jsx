@@ -333,7 +333,7 @@ export default function App() {
 
       <header className="top">
         <button className="brand" onClick={() => go('home')} aria-label={t.nav.home}>
-          <span className="brand-cd" aria-hidden="true" />FMM.exe
+          <span className="brand-cd" aria-hidden="true" />FahrizalMudzaqiMaulana.app
         </button>
         <nav className="menu" aria-label="Menu">
           {PAGES.map((p) => (
@@ -356,7 +356,7 @@ export default function App() {
         <View t={t} go={go} />
       </main>
 
-      <footer className="foot">{t.ui.footer} · © 2026 Fahrizal Mudzaqi Maulana</footer>
+      <footer className="foot">© 2026 Fahrizal Mudzaqi Maulana</footer>
 
       <nav className="tabbar" aria-label="Menu">
         {PAGES.map((p) => (
