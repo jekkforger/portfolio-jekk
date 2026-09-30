@@ -1,5 +1,7 @@
 // ====== EDIT DI SINI ======
 export const EMAIL = 'zakimaulana0754@gmail.com'
+// Access key Web3Forms (gratis, daftar di web3forms.com dengan email di atas). Tempel key di antara tanda kutip.
+export const WEB3FORMS_KEY = 'TEMPEL-ACCESS-KEY-LU-DI-SINI'
 export const WA = '6288224844088' // nomor WhatsApp tanpa tanda +
 export const CV_FILE = '/CV-Fahrizal-Mudzaqi-Maulana.pdf'
 // Isi url kalau sudah punya akun. Kalau kosong, kartunya otomatis disembunyikan.

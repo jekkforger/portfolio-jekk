@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { T, EMAIL, WA, SOCIALS, CV_FILE, PROJECT_IMGS } from './data.js'
+import { T, EMAIL, WA, SOCIALS, CV_FILE, PROJECT_IMGS, WEB3FORMS_KEY } from './data.js'
 
 const PAGES = ['home', 'about', 'skills', 'exp', 'projects', 'social']
 const ICONS = { home: '🏠', about: '👤', skills: '⚡', exp: '💼', projects: '🛰️', social: '💬' }
@@ -204,33 +204,42 @@ function Social({ t }) {
   const empty = { name: '', email: '', subject: '', message: '', website: '' }
   const [f, setF] = useState(empty)
   const [status, setStatus] = useState('idle')
+  const [detail, setDetail] = useState('')
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
 
   async function submit(e) {
     e.preventDefault()
     if (f.website) return // honeypot anti-spam
     setStatus('sending')
+    setDetail('')
+    if (!WEB3FORMS_KEY) {
+      setDetail('Access key belum diisi di src/data.js')
+      setStatus('err')
+      return
+    }
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${EMAIL}`, {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
           name: f.name,
           email: f.email,
+          subject: `[Portofolio] ${f.subject}`,
           message: f.message,
-          _subject: `[Portofolio] ${f.subject}`,
-          _template: 'table',
-          _captcha: 'false',
+          from_name: 'Website Portofolio',
         }),
       })
       const data = await res.json()
-      if (res.ok && String(data.success) === 'true') {
+      if (res.ok && data.success === true) {
         setStatus('ok')
         setF(empty)
       } else {
+        setDetail(String(data.message || ''))
         setStatus('err')
       }
     } catch {
+      setDetail('Network / CORS error')
       setStatus('err')
     }
   }
@@ -269,6 +278,7 @@ function Social({ t }) {
             <p className={`notice ${status}`} role="status" aria-live="polite">
               {status === 'ok' && s.ok}
               {status === 'err' && s.err}
+              {status === 'err' && detail && <small className="detail">Detail: {detail}</small>}
             </p>
           </form>
         </Win>
@@ -323,7 +333,7 @@ export default function App() {
 
       <header className="top">
         <button className="brand" onClick={() => go('home')} aria-label={t.nav.home}>
-          <span className="brand-cd" aria-hidden="true" />Fahrizal Mudzaqi Maulana
+          <span className="brand-cd" aria-hidden="true" />FMM.exe
         </button>
         <nav className="menu" aria-label="Menu">
           {PAGES.map((p) => (
@@ -346,7 +356,7 @@ export default function App() {
         <View t={t} go={go} />
       </main>
 
-      <footer className="foot">© 2026 Fahrizal Mudzaqi Maulana</footer>
+      <footer className="foot">{t.ui.footer} · © 2026 Fahrizal Mudzaqi Maulana</footer>
 
       <nav className="tabbar" aria-label="Menu">
         {PAGES.map((p) => (
